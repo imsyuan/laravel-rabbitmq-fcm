@@ -1,0 +1,56 @@
+version: "3.5"
+services:
+    app-consumer:
+        working_dir: /var/www/html/example-app
+        image: php:8.1-fpm-alpine
+        volumes:
+            - ../:/var/www/html
+        ports:
+            - "8000:8000"
+        restart: always
+        command: sh -c "php artisan serve --host=0.0.0.0"
+        extra_hosts:
+            - host.docker.internal:host-gateway
+    app-producer:
+        working_dir: /var/www/html/example-app
+        image: php:8.1-fpm-alpine
+        volumes:
+            - ../:/var/www/html
+        ports:
+            - "8001:8000"
+        expose:
+            - 8000
+        restart: always
+        command: sh -c "php artisan serve --host=0.0.0.0"
+        extra_hosts:
+            - host.docker.internal:host-gateway
+    laravel-mysql:
+        image: mysql:5.7.22
+        hostname: laravel-mysql
+        container_name: laravel-mysql
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "3306:3306"
+        expose:
+            - 3306
+        volumes:
+            - ./database/mysql:/docker-entrypoint-initdb.d
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        container_name: rabbitmq
+        hostname: rabbitmq
+        environment:
+            - RABBITMQ_DEFAULT_USER=root
+            - RABBITMQ_DEFAULT_PASS=root
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        expose:
+            - 5672
+            - 15672
+        volumes:
+            - ./storage/rabbitmq/data:/var/lib/rabbitmq/
+            - ./storage/logs/rabbitmq/log:/var/log/rabbitmq
+
