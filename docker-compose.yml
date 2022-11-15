@@ -1,6 +1,9 @@
 version: "3.5"
 services:
     mq-producer:
+        build:
+            dockerfile: Dockerfile
+            context: ./
         hostname: mq-producer
         container_name: mq-producer
         working_dir: /var/www/html/
@@ -8,24 +11,10 @@ services:
         volumes:
             - ./:/var/www/html/
         ports:
-            - "9000:8000"
-        expose:
-            - 9000
-        restart: always
-        command: sh -c "php artisan serve --host=0.0.0.0"
-    mq-consumer:
-        hostname: mq-consumer
-        container_name: mq-consumer
-        working_dir: /var/www/html/
-        image: php:8.1-fpm-alpine
-        volumes:
-            - ./:/var/www/html/
-        ports:
             - "9001:8000"
-        expose:
-            - 9001
         restart: always
-        command: sh -c "php artisan serve --host=0.0.0.0"
+        command: |
+            sh -c "php artisan serve --host=0.0.0.0"
     mq-mysql:
         image: mysql:5.7.22
         hostname: mq-mysql
