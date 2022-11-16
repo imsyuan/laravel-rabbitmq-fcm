@@ -20,4 +20,3 @@ COPY . .
 RUN composer install --ignore-platform-req=ext-sockets
 RUN npm install
 
-RUN chmod o+w ./storage/ -R

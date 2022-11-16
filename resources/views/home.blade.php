@@ -4,7 +4,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <a href="http://localhost:9001/producer" target="_blank">點我建立訊息</a>
+                <a href="http://localhost:9001/producer" target="_blank">Send the message.</a> <br>
+                <a href="http://localhost:15672" target="_blank">RabbitMQ management.</a>
                 <div class="card mt-3">
                     <div class="card-body">
                         @if (session('status'))
